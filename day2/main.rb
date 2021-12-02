@@ -14,7 +14,7 @@ def parse_to_movement_array(input)
   movements
 end
 
-def process(input)
+def dive(input)
   location = {depth:0, distance:0}
   parse_to_movement_array(input).each do |movement| 
     case movement[:direction]
@@ -31,4 +31,22 @@ def process(input)
   location[:depth] * location[:distance]
 end
 
-puts "#{process(read_file_and_chomp("input.txt"))}"
+def dive_with_aim(input)
+  location = {aim:0, depth:0, distance:0}
+  parse_to_movement_array(input).each do |movement| 
+    case movement[:direction]
+    when "up"
+      location[:aim]-=movement[:delta]
+    when "down"
+      location[:aim]+=movement[:delta]
+    when "forward"
+      location[:distance]+=movement[:delta]
+      location[:depth]+= (location[:aim]*movement[:delta])
+    else 
+      puts "Unknown Direction"
+    end
+  end
+  location[:depth] * location[:distance]
+end
+
+puts "#{dive_with_aim(read_file_and_chomp("input.txt"))}"
