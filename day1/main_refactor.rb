@@ -15,7 +15,7 @@ end
 def sliding_window(input)
   windowed_array = []
 
-  input.each_with_index do |depth, index|
+  input.each_index do |index|
     next if index < 2
     windowed_array.push(input[(index-2)..index].reduce(:+))
   end
