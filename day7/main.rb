@@ -11,7 +11,7 @@ def median(input)
   input.sort[input.size / 2]
 end
 def mean(input)
-  (input.reduce(0){|sum,n| sum += n} / input.size.to_f)
+  input.sum / input.size.to_f
 end
 
 puts "#{process(read_file_to_array("input.txt"))}"
