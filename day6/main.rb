@@ -1,4 +1,4 @@
-# Advent of Code - Day x
+# Advent of Code - Day 6
 require_relative "../helpers"
 
 def process(input, days)

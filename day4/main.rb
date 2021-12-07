@@ -1,4 +1,4 @@
-# Advent of Code - Day x
+# Advent of Code - Day 4
 require_relative "../helpers"
 
 class String

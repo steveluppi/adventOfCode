@@ -1,4 +1,4 @@
-# Advent of Code - Day x
+# Advent of Code - Day 5
 require_relative "../helpers"
 
 def parse_input(input)
