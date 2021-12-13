@@ -17,3 +17,8 @@ end
 class String
   def red;            "\e[31m#{self}\e[0m" end
 end
+
+def i_log(message, indent=0)
+  indent.times {|x| print ' '}
+  puts message
+end
