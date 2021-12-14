@@ -43,12 +43,14 @@ def pull_dots_and_folds(input)
   max_x, max_y = 0,0
   dots = input.reject{|x| /fold along/.match?(x)||x.empty?}.reduce([]) do |memo, line|
     x,y = line.split(',').map!(&:to_i)
-    memo[x] ||= []
-    memo[x][y] = '#'
+    memo[y] ||= []
+    memo[y][x] = '#'
     max_x = x if x>max_x
     max_y = y if y>max_y
     memo
   end
+
+  dots[max_y+1] ||= [] if max_y.odd?
 
   puts "Max x and y #{max_x} #{max_y}"
 
@@ -66,13 +68,15 @@ def process(input)
 
   # Do some folds
   folds.each do |fold|
-    if fold[:direction] == 'x'
+    if fold[:direction] == 'y'
       puts "Do a y fold #{fold} with starting graph length #{graph.length}"
       before_length = graph.length
-      puts "Slice graph on #{fold[:on]+1}"
-      lower = graph.slice(fold[:on]+1..).reverse
-      puts "Slice! graph on #{fold[:on]}"
-      graph.slice!(fold[:on]..)
+      # puts "Slice graph on #{fold[:on]+1}"
+      lower = graph.slice(fold[:on]+1..)
+      abort "Lower is wrong" if lower[0] != graph[fold[:on]+1]
+      lower.reverse!
+      # puts "Slice! graph on #{fold[:on]}"
+      graph = graph.slice(0..fold[:on]-1)
       print_graph("Upper", graph)
       print_graph("Lower", lower)
 
