@@ -116,13 +116,36 @@ end
 def make_part_two_cave(filepath)
   file_lines = read_file_and_chomp(filepath)
   # cave["#{index},#{vi}"] = {v:index, h:vi, cost:value.to_i, visited:false, dist:nil, from:nil, in_q:false}
+  cave = {}
+  big_cave = []
   file_lines.each_with_index do |line, index|
-    cols = line.split('').each_with_index do |col, c_index|
+    p line
+    new_line = []
+    5.times do |iteration|
+      line.split('').each_with_index do |col, c_index|
+        new_line.push(col.to_i+iteration)
+      end
     end
+    new_line.map!{|v| v>9 ? v-9 : v}
+    p new_line
+    big_cave.push(new_line)
   end
 
-  nil
+  bigger_cave = []
+  4.times do |iter|
+    bigger_cave.concat(big_cave.map{|l| l.map{|v| v+iter+1}})
+  end
+  bigger_cave.map!{|l| l.map!{|v| v>9 ? v-9 : v}}
+  #p bigger_cave
+  big_cave.each{|l| puts l.join("")}
+  bigger_cave.each{|l| puts l.join("")}
+  big_cave.concat(bigger_cave).each_with_index do |line, index|
+    line.each_with_index do |value, vi|
+      cave["#{index},#{vi}"] = {v:index, h:vi, cost:value.to_i, visited:false, dist:nil, from:nil, in_q:false}
+    end
+  end
+  cave
 end
 
 # puts "#{process(read_file_to_array_of_i("input.txt"))}"
-puts "#{(make_part_two_cave("test.txt"))}"
+puts "#{process(make_part_two_cave("test.txt"))}"
