@@ -72,8 +72,8 @@ def make_part_two_cave(filepath)
     bigger_cave.concat(big_cave.map{|l| l.map{|v| v+iter+1}})
   end
   bigger_cave.map!{|l| l.map!{|v| v>9 ? v-9 : v}}
-  # big_cave.each{|l| puts l.join("")}
-  # bigger_cave.each{|l| puts l.join("")}
+  big_cave.each{|l| puts l.join("")}
+  bigger_cave.each{|l| puts l.join("")}
   big_cave.concat(bigger_cave).each_with_index do |line, index|
     line.each_with_index do |value, vi|
       cave["#{index},#{vi}"] = {v:index, h:vi, cost:value.to_i, visited:false, dist:nil, from:nil, in_q:false}

@@ -9,31 +9,25 @@ real_cave_small = read_file_to_array_of_i("input.txt")
 test_cave_big = make_part_two_cave("test.txt")
 real_cave_big = make_part_two_cave("input.txt")
 
-puts "Excecute test big cave?"
-x = gets.chomp
-unless x == 'x'
-  puts "Executing test cave big"
+def exec_it(name, cave)
+  puts "Running #{name}"
   time = Benchmark.measure do
-    p process(test_cave_big)
+    p process(cave)
   end
-  puts "Execution time #{time.real}"
+  puts "#{name} timing #{time.real}"
 end
 
-puts "Execute test small cave?"
+exec_it("hardcoded test big", test_cave_big)
+exit
+
+puts "TEST : BIG"
 x = gets.chomp
-unless x == 'x'
-  puts "Executing test cave small"
-  time = Benchmark.measure do
-    p process(test_cave_small)
-  end
-  puts "Execution time #{time.real}"
-end
-puts "Excecute real small cave?"
+exec_it("TEST BIG",test_cave_big) unless x == 'x'
+
+puts "TEST : SMALL"
 x = gets.chomp
-unless x == 'x'
-  puts "Executing real cave small"
-  time = Benchmark.measure do
-    p process(real_cave_small)
-  end
-  puts "Execution time #{time.real}"
-end
+exec_it("TEST SMALL",test_cave_small) unless x=='x'
+
+puts "REAL : SMALL"
+x = gets.chomp
+exec_it("REAL SMALL",real_cave_small) unless x == 'x'
