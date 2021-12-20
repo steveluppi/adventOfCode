@@ -6,6 +6,7 @@ def process(cave)
   cave["0,0"][:dist] = 0
 
   loop do 
+    # puts "Looping on position #{position}"
     cv, ch = position
     current = cave["#{cv},#{ch}"]
     break if ch == max_h && cv == max_v

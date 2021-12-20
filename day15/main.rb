@@ -17,7 +17,7 @@ def exec_it(name, cave)
   puts "#{name} timing #{time.real}"
 end
 
-exec_it("hardcoded test big", test_cave_big)
+exec_it("hardcoded test big", real_cave_big)
 exit
 
 puts "TEST : BIG"

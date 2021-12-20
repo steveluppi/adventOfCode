@@ -72,6 +72,7 @@ def make_part_two_cave(filepath)
     bigger_cave.concat(big_cave.map{|l| l.map{|v| v+iter+1}})
   end
   bigger_cave.map!{|l| l.map!{|v| v>9 ? v-9 : v}}
+  puts "Cave Output"
   big_cave.each{|l| puts l.join("")}
   bigger_cave.each{|l| puts l.join("")}
   big_cave.concat(bigger_cave).each_with_index do |line, index|
