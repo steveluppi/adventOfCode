@@ -2,7 +2,7 @@ def read_file_and_chomp(file_path)
   File.readlines(file_path).map { |line| line.chomp }
 end
 
-def read_file_to_array(file_path)
+def read_file_to_array_i(file_path)
   File.readlines(file_path).map(&:chomp).first.split(',').map(&:to_i)
 end
 
