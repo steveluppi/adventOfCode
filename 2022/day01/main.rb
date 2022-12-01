@@ -3,12 +3,17 @@ require_relative "../helpers"
 
 
 def process(input)
-  for i in input
-    puts i
+  biggest=0
+  sum=0
+  for line in input
+    if line.empty?
+      biggest = sum if sum>biggest
+      sum=0
+      next
+    end
+    sum+=line.to_i
   end
-
-
-  "done"
+  biggest
 end
 
 
