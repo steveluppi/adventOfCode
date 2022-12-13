@@ -20,6 +20,7 @@ end
 
 class String
   def red;            "\e[31m#{self}\e[0m" end
+  def green;          "\e[32m#{self}\e[0m" end
 end
 
 def i_log(message, indent=0)
