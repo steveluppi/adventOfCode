@@ -1,10 +1,9 @@
 # Advent of Code - Day x
 require_relative '../../helpers'
-require 'io/console'
 
 # RE = /(?=\d.+\d)(?>(\d).*(?(?=\d)(\d)|(.*(\d))))|(\d)/
 RE = /(\d).*(?>(\d))|(\d)/
-DEBUG = true
+DEBUG = false
 
 def silver(input)
   sum = 0
@@ -63,7 +62,7 @@ def gold2(input)
     last = line.reverse.scan(/eno|owt|eerht|ruof|evif|xis|neves|thgie|enin|\d/)[0]
 
     last.reverse! if last.length > 1
-    puts "[#{string_to_num(first)}#{string_to_num(last)}] #{string_to_num first}[#{first}] and #{string_to_num last}[#{last}] of #{line}"
+    puts "[#{string_to_num(first)}#{string_to_num(last)}] #{string_to_num first}[#{first}] and #{string_to_num last}[#{last}] of #{line}" if DEBUG
 
     sum += (string_to_num(first).to_s + string_to_num(last).to_s).to_i
   end
