@@ -1,5 +1,5 @@
 # Advent of Code - Day x
-require_relative '../helpers'
+require_relative '../../helpers'
 
 def silver(input)
   input.each do |i|
