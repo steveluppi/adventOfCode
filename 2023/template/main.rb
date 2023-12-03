@@ -10,6 +10,7 @@ def silver(input)
 end
 
 def gold(input)
+  return
   input.each do |i|
     puts i
   end
