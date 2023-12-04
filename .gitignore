@@ -3,3 +3,4 @@
 **test.txt
 day_template
 **/*.swp
+.DS_Store
