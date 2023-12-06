@@ -1,3 +1,8 @@
+AllCops:
+  Exclude:
+    - '**/*'
+
+
 Style/FrozenStringLiteralComment:
   Enabled: false
 Metrics/MethodLength:
@@ -6,3 +11,5 @@ Layout/LineLength:
   Enabled: false
 Metrics/AbcSize:
   Enabled: false
+Style/GlobalVars:
+  Enable: false
