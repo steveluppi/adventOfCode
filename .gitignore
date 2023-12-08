@@ -3,4 +3,5 @@
 **test.txt
 day_template
 **/*.swp
+**/Session.vim
 .DS_Store
