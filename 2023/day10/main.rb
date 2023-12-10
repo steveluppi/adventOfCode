@@ -23,11 +23,13 @@ class Location
   attr_reader :row
   attr_reader :col
   attr_reader :label
+  attr_accessor  :seen
 
   def initialize(label, row, col)
     @label = label
     @row = row
     @col = col
+    @seen = false
   end
 
   def inspect
@@ -47,6 +49,20 @@ class Location
     @row==r && @col==c
   end
 
+  def graphic
+    lines = {
+      '|' => '│',
+      '-' => '─',
+      '7' => '╮',
+      'F' => '╭',
+      'J' => '╯',
+      'L' => '╰',
+      '.' => '•',
+      'O' => '•',
+      'I' => '•',
+    }
+    lines[@label] || @label.red
+  end
   def coords
     [@row, @col]
   end
@@ -178,6 +194,7 @@ def silver(input)
 end
 
 def gold(input)
+  $grid = []
   $max_row = input.length
   $max_col = input[0].length
   input.each_with_index do |i, r_idx|
@@ -187,13 +204,10 @@ def gold(input)
   start = $grid.find { |l| l.is_start? }
   visited = Set[start.coords]
   current = Set.new
-  p start
   current << start.north_to if start.move_north? and current.size == 0
   current << start.south_to if start.move_south? and current.size == 0
   current << start.east_to if start.move_east? and current.size == 0
   current << start.west_to if start.move_west? and current.size == 0
-  p visited
-  p current
 
   # while current.length > 1
   loop do
@@ -217,82 +231,76 @@ def gold(input)
     break if current.length == 0
   end
 
-  print_grid
+  # print_grid
 
-  inside = 0
-  are_inside = false
   input.each_with_index do |row, r_idx|
-    pipes = 2
-    are_in_hor = false
-    horiz_edge_pipe = false
     row.chars.each_with_index do |col, c_idx|
       pos = $grid.find {|g| g.is?(r_idx, c_idx) }
-      # puts "We are at #{r_idx} and #{c_idx}"
-      # puts " and its visit state is #{visited.include? [r_idx, c_idx]}"
-      # if we hit a pipe, and we were not inside
       been_here = visited.include?([r_idx, c_idx])
       # print been_here ? 'v' : '.'
       # print been_here ? (pos.horizontal? ? '-' : (pos.vertical? ? '|' : '.')) : '.'
       # print been_here ? (pos.corner? ? 'X' : (pos.horizontal? ? '-' : (pos.vertical? ? '|' : '.'))) : '.'
-      # next
-
-      if pos.corner?
-        # print "X"
-        if are_in_hor
-          # this is the end of a horizontal pipe
-          are_in_hor = false
-          n = $grid.find{|l| l.is?(r_idx, c_idx+1)}
-          edge = n.vertical? and visited.include?(n.coords)
-          counts = edge and horiz_edge_pipe
-          print counts ? 'E' : 'e'
-          pipes += 1 if counts 
-          are_inside = !are_inside if counts
-        else
-          # print "B"
-          # this is the beginning of a horizontal pipe
-          are_in_hor = true
-          prev = $grid.find{|l| l.is?(r_idx, c_idx-1)}
-          horiz_edge_pipe = prev.vertical? and visited.include?(prev.coords)
-          print horiz_edge_pipe ? 'B' : 'b'
-          are_inside = !are_inside if horiz_edge_pipe
-        end
-      elsif pos.horizontal?
-        if been_here
-          print '-'
-        else
-          inside += 1 if are_inside
-          print are_inside ? 'I' : 'O'
-        end
-      elsif pos.vertical?
-        print "|"
-        are_inside = !are_inside
-        pipes += 1
-      elsif !been_here
-        # do nothing?
-        inside += 1 if are_inside
-        print are_inside ? '•'.red : '.'
-      else 
-        p pos
-        throw "WHERE ARE WE"
-      end
+      g = pos.graphic
+      print been_here ? g.green : g
     end
     puts
-    # are_inside = false # this should be removalbe
   end
+
+  # The loop goes here.
+  stack = []
+  start = $grid.find {|l| l.is?(0,0) }
+
+  stack.push start
+
+  loop do
+    working_on = stack.pop
+    puts "working on #{working_on}"
+    working_on.seen = true
+
+    north = $grid.find {|l| x,y = working_on.north_to; l.is?(x,y) }
+    unless north.nil?
+      stack.push north if !visited.include?(north.coords) and north.seen == false
+    end
+
+    south = $grid.find {|l| x,y = working_on.south_to; l.is?(x,y) }
+    unless south.nil?
+      stack.push south if !visited.include?(south.coords) and south.seen == false
+    end
+
+    east = $grid.find {|l| x,y = working_on.east_to; l.is?(x,y) }
+    unless east.nil?
+      stack.push east if !visited.include?(east.coords) and east.seen == false
+    end
+
+    west = $grid.find {|l| x,y = working_on.west_to; l.is?(x,y) }
+    unless west.nil?
+      stack.push west if !visited.include?(west.coords) and west.seen == false
+    end
+
+    break if stack.length == 0
+  end
+
+  seen = $grid.map { |l| l.seen ? 1 : 0 }.inject(:+)
+  puts "#{seen} is how many were seen"
+  not_seen = $grid.map { |l| l.seen ? 0 : 1 }.inject(:+)
+  puts "#{not_seen} is how many were not seen"
+  inside = not_seen - visited.size
+  puts "which makes #{inside} the number inside because we took away #{visited.size}"
+
   inside
 end
 
 # Main execution
-@input = read_file_and_chomp(
-  case ARGV[0]
-  when 'silver'
-    'silver.txt'
-  when 'gold'
-    'gold.txt'
-  else
-    'example.txt'
-  end
-)
+# @input = read_file_and_chomp(
+#   case ARGV[0]
+#   when 'silver'
+#     'silver.txt'
+#   when 'gold'
+#     'gold.txt'
+#   else
+#     'example.txt'
+#   end
+# )
 
-puts "Silver: #{silver(@input)}"
-puts "Gold: #{gold(@input)}"
+# puts "Silver: #{silver(@input)}"
+# puts "Gold: #{gold(@input)}"
