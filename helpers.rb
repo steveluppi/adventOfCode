@@ -14,9 +14,9 @@ def array_to_i(input)
   input.map(&:to_i)
 end
 
-# class String
-#   def red = "\e[31m#{self}\e[0m"
-# end
+class String
+  def red = "\e[31m#{self}\e[0m"
+end
 
 def i_log(message, indent = 0)
   indent.times { |_x| print ' ' }
