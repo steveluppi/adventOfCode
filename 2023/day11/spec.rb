@@ -54,7 +54,50 @@ describe 'day11' do
       expect(count).to eq 9
     end
 
+    describe 'path set' do
+      it 'knows all the paths it should make' do
+        raw = """
+...#......
+.......#..
+#.........
+..........
+......#...
+.#........
+.........#
+..........
+.......#..
+#...#.....
+        """
+        map = Day11.make_map(Day11.parse(raw))
+        paths = Day11.path_set(map)
+        expect(paths.size).to eq 36
+      end
+    end
+
     describe 'path_between' do
+      it 'knows a straight line when it sees one' do
+        raw = """
+...#......
+.......#..
+#.........
+..........
+......#...
+.#........
+.........#
+..........
+.......#..
+#...#.....
+        """
+        map = Day11.make_map(Day11.parse(raw))
+        from = map.find {|l| l.label=='8'}.coords
+        to = map.find {|l| l.label=='9'}.coords
+        three = map.find {|l| l.label=='3'}.coords
+        x = Day11.path_between(map, from, to)
+        y = Day11.path_between(map, three, from)
+        expect(x).to eq 5
+        expect(y).to eq 9
+      end
+
       it 'knows at least one path' do
         raw = """
 ...#......
@@ -76,6 +119,43 @@ describe 'day11' do
         expect(x).to eq 9
       end
     end
+    describe 'all together now' do
+      it 'can do the basic puzzle' do
+        raw = """
+...#......
+.......#..
+#.........
+..........
+......#...
+.#........
+.........#
+..........
+.......#..
+#...#.....
+        """
+        map = Day11.make_map(Day11.parse(raw))
 
+        set = Day11.path_set(map)
+        lengths = set.map do |labels|
+          p labels
+          from_label, to_label = labels.map(&:to_s)
+          from = map.find {|l| l.label == from_label }
+          to = map.find {|l| l.label == to_label }
+          Day11.path_between(map, from.coords, to.coords)
+        end
+        expect(lengths.inject(:+)).to be 374
+      end
+    end
+  end
+
+  it 'can do my real one' do
+    raw = read_file_and_chomp('silver.txt')
+    expect(gold(raw)).to be 100
+    map = Day11.make_map(Day11.parse(raw))
+
+    from = map.find {|l| l.label=='5'}.coords
+    to = map.find {|l| l.label=='9'}.coords
+    x = Day11.path_between(map, from, to)
+    expect(x).to be nil
   end
 end
