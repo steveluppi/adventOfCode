@@ -1,8 +1,9 @@
 require_relative '../../helpers'
 require 'io/console'
+require 'set'
 
 class Location
-  attr_accessor :row
+  attr_accessor :row 
   attr_accessor :col
   attr_accessor :label
   attr_accessor :seen
@@ -67,7 +68,7 @@ class Day11
     biggest = biggest.transpose
     biggest.map { |ra| ra.join }
   end
-  
+
   def self.make_map(input)
     count=1
     map = []
@@ -78,7 +79,7 @@ class Day11
       end
     end
     map
-   end
+  end
 
   def self.path_set(map)
     galaxies = map.filter {|l| l.is_galaxy? }
@@ -94,9 +95,7 @@ class Day11
   end
 
   def self.path_between(map, from, to)
-    shortest = nil
     start = map.find {|l| x,y = from; l.is?(x,y) }
-    stack = [[start,[]]]
 
     to_x, to_y = to
     from_x, from_y = from
@@ -108,59 +107,8 @@ class Day11
       return to_y - from_y if to_x == from_x
       return to_x - from_x if to_y == from_y
     end
-    # determine which diretions we need to go
-    # it will always be south if it is not a straight line
-    # so we only need to know east and west.
-    go_west = to_y < from_y
 
-    loop do
-      working_on, seen = stack.pop
-
-      if working_on.is?(to_x,to_y)
-        # p seen.length
-        # p seen
-        shortest = [shortest, seen.length].compact.min
-        break if stack.length==0
-        next
-      end
-
-      seen << working_on.coords
-      current_path_length = seen.length
-
-      if shortest.nil? or current_path_length < shortest
-        # north = map.find {|l| x,y = working_on.north_to; l.is?(x,y) }
-        # unless north.nil?
-        #   stack.push [north, seen.clone] unless seen.include?(north.coords)
-        # end
-
-        south = map.find {|l| x,y = working_on.south_to; l.is?(x,y) }
-        unless south.nil? or south.coords[0]>to_x
-          stack.push [south, seen.clone] unless seen.include?(south.coords)
-        end
-
-        unless go_west
-          east = map.find {|l| x,y = working_on.east_to; l.is?(x,y) }
-          unless east.nil? or east.coords[1] > to_y
-            stack.push [east, seen.clone] unless seen.include?(east.coords)
-          end
-        end
-
-        if go_west
-          west = map.find {|l| x,y = working_on.west_to; l.is?(x,y) }
-          unless west.nil? or west.coords[1] < to_y
-            stack.push [west, seen.clone] unless seen.include?(west.coords)
-          end
-        end
-      end
-
-      # puts 'lets take this a step at a time'
-      # p stack
-      # q_to_quit
-
-      break if stack.length == 0
-    end
-    p shortest
-    shortest
+    return to_x-from_x + (to_y-from_y).abs
   end
 
   def self.q_to_quit
