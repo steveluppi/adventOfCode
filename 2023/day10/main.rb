@@ -24,12 +24,14 @@ class Location
   attr_reader :col
   attr_reader :label
   attr_accessor  :seen
+  attr_accessor :parent
 
-  def initialize(label, row, col)
+  def initialize(label, row, col, parent=nil)
     @label = label
     @row = row
     @col = col
     @seen = false
+    @parent = parent
   end
 
   def inspect
@@ -195,10 +197,23 @@ end
 
 def gold(input)
   $grid = []
+  $big_grid = []
   $max_row = input.length
   $max_col = input[0].length
   input.each_with_index do |i, r_idx|
-    i.chars.each_with_index { |c, c_idx| $grid << Location.new(c, r_idx, c_idx) }
+    i.chars.each_with_index do |c, c_idx| 
+      main_location = Location.new(c, r_idx, c_idx)
+      $grid << main_location
+      $big_grid << Location.new('.', r_idx*3+0, c_idx*3+0, main_location)
+      $big_grid << Location.new(main_location.north? ? '|' : '.', r_idx*3+0, c_idx*3+1, main_location)
+      $big_grid << Location.new('.', r_idx*3+0, c_idx*3+2, main_location)
+      $big_grid << Location.new(main_location.west? ? '-' : '.', r_idx*3+1, c_idx*3+0, main_location)
+      $big_grid << Location.new(c, r_idx*3+1, c_idx*3+1, main_location)
+      $big_grid << Location.new(main_location.east? ? '-' : '.', r_idx*3+1, c_idx*3+2, main_location)
+      $big_grid << Location.new('.', r_idx*3+2, c_idx*3+0, main_location)
+      $big_grid << Location.new(main_location.south? ? '|' : '.', r_idx*3+2, c_idx*3+1, main_location)
+      $big_grid << Location.new('.', r_idx*3+2, c_idx*3+2, main_location)
+    end
   end
   
   start = $grid.find { |l| l.is_start? }
@@ -233,22 +248,35 @@ def gold(input)
 
   # print_grid
 
-  input.each_with_index do |row, r_idx|
-    row.chars.each_with_index do |col, c_idx|
-      pos = $grid.find {|g| g.is?(r_idx, c_idx) }
-      been_here = visited.include?([r_idx, c_idx])
-      # print been_here ? 'v' : '.'
-      # print been_here ? (pos.horizontal? ? '-' : (pos.vertical? ? '|' : '.')) : '.'
-      # print been_here ? (pos.corner? ? 'X' : (pos.horizontal? ? '-' : (pos.vertical? ? '|' : '.'))) : '.'
-      g = pos.graphic
-      print been_here ? g.green : g
-    end
-    puts
-  end
+  # input.each_with_index do |row, r_idx|
+  #   row.chars.each_with_index do |col, c_idx|
+  #     pos = $grid.find {|g| g.is?(r_idx, c_idx) }
+  #     been_here = visited.include?([r_idx, c_idx])
+  #     # print been_here ? 'v' : '.'
+  #     # print been_here ? (pos.horizontal? ? '-' : (pos.vertical? ? '|' : '.')) : '.'
+  #     # print been_here ? (pos.corner? ? 'X' : (pos.horizontal? ? '-' : (pos.vertical? ? '|' : '.'))) : '.'
+  #     g = pos.graphic
+  #     print been_here ? g.green : g
+  #   end
+  #   puts
+  # end
+
+  p input.length*3
+  p input[0].chars.length*3
+  
+  # (input.length * 3).times do |r_idx|
+  #   (input[0].length * 3).times do |c_idx|
+  #     pos = $big_grid.find { |g| g.is?(r_idx, c_idx) }
+  #     been_here = visited.include?(pos.parent.coords)
+  #     g = pos.graphic
+  #     print been_here ? g.green : g
+  #   end
+  #   puts
+  # end
 
   # The loop goes here.
   stack = []
-  start = $grid.find {|l| l.is?(0,0) }
+  start = $big_grid.find {|l| l.is?(0,0) }
 
   stack.push start
 
@@ -256,38 +284,59 @@ def gold(input)
     working_on = stack.pop
     puts "working on #{working_on}"
     working_on.seen = true
+    working_on.parent.seen = true
 
-    north = $grid.find {|l| x,y = working_on.north_to; l.is?(x,y) }
+    north = $big_grid.find {|l| x,y = working_on.north_to; l.is?(x,y) }
     unless north.nil?
-      stack.push north if !visited.include?(north.coords) and north.seen == false
+      stack.push north if (north.label == '.' or !visited.include?(north.parent.coords)) and north.seen == false
     end
 
-    south = $grid.find {|l| x,y = working_on.south_to; l.is?(x,y) }
+    south = $big_grid.find {|l| x,y = working_on.south_to; l.is?(x,y) }
     unless south.nil?
-      stack.push south if !visited.include?(south.coords) and south.seen == false
+      stack.push south if (south.label == '.' or !visited.include?(south.parent.coords)) and south.seen == false
     end
 
-    east = $grid.find {|l| x,y = working_on.east_to; l.is?(x,y) }
+    east = $big_grid.find {|l| x,y = working_on.east_to; l.is?(x,y) }
     unless east.nil?
-      stack.push east if !visited.include?(east.coords) and east.seen == false
+      stack.push east if (east.label == '.' or !visited.include?(east.parent.coords)) and east.seen == false
     end
 
-    west = $grid.find {|l| x,y = working_on.west_to; l.is?(x,y) }
+    west = $big_grid.find {|l| x,y = working_on.west_to; l.is?(x,y) }
     unless west.nil?
-      stack.push west if !visited.include?(west.coords) and west.seen == false
+      stack.push west if (west.label == '.' or !visited.include?(west.parent.coords)) and west.seen == false
     end
 
     break if stack.length == 0
   end
 
-  seen = $grid.map { |l| l.seen ? 1 : 0 }.inject(:+)
-  puts "#{seen} is how many were seen"
+  # (input.length * 3).times do |r_idx|
+  #   (input[0].length * 3).times do |c_idx|
+  #     pos = $big_grid.find { |g| g.is?(r_idx, c_idx) }
+  #     been_here = visited.include?(pos.parent.coords)
+  #     g = pos.graphic
+  #     print pos.seen ? g.red : been_here ? g.green : g
+  #   end
+    # puts
+  # end
+
+  # seen = $grid.map { |l| l.seen ? 1 : 0 }.inject(:+)
+  # puts "#{seen} is how many were seen"
   not_seen = $grid.map { |l| l.seen ? 0 : 1 }.inject(:+)
   puts "#{not_seen} is how many were not seen"
-  inside = not_seen - visited.size
-  puts "which makes #{inside} the number inside because we took away #{visited.size}"
+  # inside = not_seen - visited.size
+  # puts "which makes #{inside} the number inside because we took away #{visited.size}"
 
-  inside
+  # input.each_with_index do |row, r_idx|
+  #   row.chars.each_with_index do |col, c_idx|
+  #     pos = $grid.find {|g| g.is?(r_idx, c_idx) }
+  #     been_here = visited.include?([r_idx, c_idx])
+  #     g = pos.graphic
+  #     print pos.seen ? g.red : been_here ? g.green : g
+  #   end
+  #   puts
+  # end
+
+  not_seen
 end
 
 # Main execution

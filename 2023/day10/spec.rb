@@ -1,26 +1,6 @@
 require_relative 'main.rb'
 
 describe ' today really sucks' do
-  it 'can do the very most basic one' do
-    raw = """
-7-F7-
-.FJ|7
-SJLL7
-|F--J
-LJ.LJ
-"""
-    puts
-    expect(gold(raw.split)).to be 4
-  end
-
-  it 'can do my own made up one' do
-    raw = """
-xxx
-"""
-    puts
-    expect(gold(raw.split)).to be 4
-  end
-
   it 'can do the most basic one' do
     raw = """
 ..........
@@ -89,8 +69,8 @@ L7JLJL-JLJLJL--JLJ.L
     expect(gold(raw.split)).to be 10
   end
 
-  # it 'can do my real one' do
-  #   raw = read_file_and_chomp('silver.txt')
-  #   expect(gold(raw)).to be 100
-  # end
+  it 'can do my real one' do
+    raw = read_file_and_chomp('silver.txt')
+    expect(gold(raw)).to be 100
+  end
 end
