@@ -37,6 +37,16 @@ describe 'day11' do
       expect(x).to eq @raw_output.split
     end
   end
+  
+  describe 'gold map' do
+    it 'knows the right expansions' do
+      y = Day11.make_map(Day11.parse(@raw.split)).filter {|l| l.is_galaxy? }
+      x = Day11.gold_map(@raw.split, 1)
+      # x = Day11.gold_map(@silver, 2)
+      p y
+      p x
+    end
+  end
 
   describe 'make_map' do
     it 'gets the right number of galaxies' do
@@ -92,6 +102,33 @@ describe 'day11' do
       expect(lengths.inject(:+)).to be 374
     end
 
+   it 'can do the basic puzzle with gold parse 10' do
+     map = Day11.gold_map(@raw.split, 9)
+
+      set = Day11.path_set(map)
+      lengths = set.map do |labels|
+        # p labels
+        from_label, to_label = labels.map(&:to_s)
+        from = map.find {|l| l.label == from_label }
+        to = map.find {|l| l.label == to_label }
+        Day11.path_between(map, from.coords, to.coords)
+      end
+      expect(lengths.inject(:+)).to be 1030
+    end
+   it 'can do the basic puzzle with gold parse 100' do
+     map = Day11.gold_map(@raw.split, 99)
+
+      set = Day11.path_set(map)
+      lengths = set.map do |labels|
+        # p labels
+        from_label, to_label = labels.map(&:to_s)
+        from = map.find {|l| l.label == from_label }
+        to = map.find {|l| l.label == to_label }
+        Day11.path_between(map, from.coords, to.coords)
+      end
+      expect(lengths.inject(:+)).to be 8410
+    end
+
     xit 'can do one silver path' do
       parsed = Day11.parse(@silver)
       map = Day11.make_map(parsed)
@@ -118,6 +155,20 @@ describe 'day11' do
 
     it 'can do my real one' do
       map = Day11.make_map(Day11.parse(read_file_and_chomp('silver.txt')))
+
+      set = Day11.path_set(map)
+      puts "we have #{set.length} paths to make"
+      lengths = set.map do |labels|
+        from_label, to_label = labels.map(&:to_s)
+        from = map.find {|l| l.label == from_label }
+        to = map.find {|l| l.label == to_label }
+        Day11.path_between(map, from.coords, to.coords)
+      end
+      expect(lengths.inject(:+)).to eq 10231178
+    end
+
+    it 'can do my real one with the gold parse' do
+      map = Day11.gold_map(@silver, 999999)
 
       set = Day11.path_set(map)
       puts "we have #{set.length} paths to make"

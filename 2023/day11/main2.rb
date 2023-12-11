@@ -81,6 +81,37 @@ class Day11
     map
   end
 
+  def self.gold_map(lines, factor)
+    row_expand = []
+    col_expand = []
+    lines.each_with_index do |line, index|
+      row_expand << index if line.chars.all? { |c| c == '.' }
+    end
+    chars = lines.map{|l| l.chars}
+    chars = chars.transpose
+    chars.each_with_index do |line, index|
+      col_expand << index if line.all? { |c| c == '.' }
+    end
+
+    p row_expand
+    p col_expand
+
+    count=1
+    map = []
+    lines.each_with_index do |row, row_index|
+      row.chars.each_with_index do |col, col_index|
+        next if col == '.'
+        # we have a galaxy
+        # we need to calc the offset.
+        extra_rows = row_expand.select {|r| r < row_index}.count
+        extra_cols = col_expand.select {|c| c < col_index}.count
+        map << Location.new(row_index+(factor*extra_rows), col_index+(factor*extra_cols), count.to_s)
+        count +=1
+      end
+    end
+    map
+  end
+
   def self.path_set(map)
     galaxies = map.filter {|l| l.is_galaxy? }
     count = galaxies.size
