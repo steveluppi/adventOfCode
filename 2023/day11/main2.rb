@@ -1,3 +1,4 @@
+require_relative '../../helpers'
 require 'io/console'
 
 class Location
@@ -51,8 +52,7 @@ class Location
 end
 
 class Day11
-  def self.parse(raw)
-    lines = raw.split
+  def self.parse(lines)
     bigger = []
     lines.each do |line|
       bigger << line.chars
@@ -78,7 +78,7 @@ class Day11
       end
     end
     map
-  end
+   end
 
   def self.path_set(map)
     galaxies = map.filter {|l| l.is_galaxy? }
@@ -125,28 +125,31 @@ class Day11
       end
 
       seen << working_on.coords
+      current_path_length = seen.length
 
-      # north = map.find {|l| x,y = working_on.north_to; l.is?(x,y) }
-      # unless north.nil?
-      #   stack.push [north, seen.clone] unless seen.include?(north.coords)
-      # end
+      if shortest.nil? or current_path_length < shortest
+        # north = map.find {|l| x,y = working_on.north_to; l.is?(x,y) }
+        # unless north.nil?
+        #   stack.push [north, seen.clone] unless seen.include?(north.coords)
+        # end
 
-      south = map.find {|l| x,y = working_on.south_to; l.is?(x,y) }
-      unless south.nil?
-        stack.push [south, seen.clone] unless seen.include?(south.coords)
-      end
-
-      unless go_west
-        east = map.find {|l| x,y = working_on.east_to; l.is?(x,y) }
-        unless east.nil?
-          stack.push [east, seen.clone] unless seen.include?(east.coords)
+        south = map.find {|l| x,y = working_on.south_to; l.is?(x,y) }
+        unless south.nil? or south.coords[0]>to_x
+          stack.push [south, seen.clone] unless seen.include?(south.coords)
         end
-      end
 
-      if go_west
-        west = map.find {|l| x,y = working_on.west_to; l.is?(x,y) }
-        unless west.nil?
-          stack.push [west, seen.clone] unless seen.include?(west.coords)
+        unless go_west
+          east = map.find {|l| x,y = working_on.east_to; l.is?(x,y) }
+          unless east.nil? or east.coords[1] > to_y
+            stack.push [east, seen.clone] unless seen.include?(east.coords)
+          end
+        end
+
+        if go_west
+          west = map.find {|l| x,y = working_on.west_to; l.is?(x,y) }
+          unless west.nil? or west.coords[1] < to_y
+            stack.push [west, seen.clone] unless seen.include?(west.coords)
+          end
         end
       end
 
@@ -156,6 +159,7 @@ class Day11
 
       break if stack.length == 0
     end
+    p shortest
     shortest
   end
 

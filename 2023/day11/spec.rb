@@ -29,7 +29,7 @@ describe 'day11' do
 .........#...
 #....#.......
       """
-      x = Day11.parse(raw)
+      x = Day11.parse(raw.split)
       expect(x).to eq output.split
     end
   end
@@ -48,7 +48,7 @@ describe 'day11' do
 .......#..
 #...#.....
       """
-      x = Day11.make_map(Day11.parse(raw))
+      x = Day11.make_map(Day11.parse(raw.split))
       count = x.select {|l| l.is_galaxy? }.size
 
       expect(count).to eq 9
@@ -68,7 +68,7 @@ describe 'day11' do
 .......#..
 #...#.....
         """
-        map = Day11.make_map(Day11.parse(raw))
+        map = Day11.make_map(Day11.parse(raw.split))
         paths = Day11.path_set(map)
         expect(paths.size).to eq 36
       end
@@ -88,7 +88,7 @@ describe 'day11' do
 .......#..
 #...#.....
         """
-        map = Day11.make_map(Day11.parse(raw))
+        map = Day11.make_map(Day11.parse(raw.split))
         from = map.find {|l| l.label=='8'}.coords
         to = map.find {|l| l.label=='9'}.coords
         three = map.find {|l| l.label=='3'}.coords
@@ -111,7 +111,7 @@ describe 'day11' do
 .......#..
 #...#.....
         """
-        map = Day11.make_map(Day11.parse(raw))
+        map = Day11.make_map(Day11.parse(raw.split))
 
         from = map.find {|l| l.label=='5'}.coords
         to = map.find {|l| l.label=='9'}.coords
@@ -133,7 +133,7 @@ describe 'day11' do
 .......#..
 #...#.....
         """
-        map = Day11.make_map(Day11.parse(raw))
+        map = Day11.make_map(Day11.parse(raw.split))
 
         set = Day11.path_set(map)
         lengths = set.map do |labels|
@@ -148,14 +148,25 @@ describe 'day11' do
     end
   end
 
-  it 'can do my real one' do
-    raw = read_file_and_chomp('silver.txt')
-    expect(gold(raw)).to be 100
-    map = Day11.make_map(Day11.parse(raw))
+  it 'can do my real one at least once' do
+    map = Day11.make_map(Day11.parse(read_file_and_chomp('silver.txt')))
 
-    from = map.find {|l| l.label=='5'}.coords
-    to = map.find {|l| l.label=='9'}.coords
+    from = map.find {|l| l.label=='1'}.coords
+    to = map.find {|l| l.label=='21'}.coords
     x = Day11.path_between(map, from, to)
     expect(x).to be nil
+  end
+  xit 'can do my real one' do
+    map = Day11.make_map(Day11.parse(read_file_and_chomp('silver.txt')))
+
+    set = Day11.path_set(map)
+    lengths = set.map do |labels|
+      p labels
+      from_label, to_label = labels.map(&:to_s)
+      from = map.find {|l| l.label == from_label }
+      to = map.find {|l| l.label == to_label }
+      Day11.path_between(map, from.coords, to.coords)
+    end
+    expect(lengths.inject(:+)).to be nil
   end
 end
