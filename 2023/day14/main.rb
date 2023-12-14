@@ -45,6 +45,7 @@ class Field
   def initialize(raw_input)
     @field = []
     
+    @sorts = {}
     build_field(raw_input)
   end
 
@@ -57,8 +58,55 @@ class Field
     end
   end
 
-  def cycle
+  def print_cycle
+    print_field
+    puts
 
+    @field = @field.transpose
+
+    print_field
+    puts
+
+    @field.map! {|r| r.reverse}
+    @field = @field.transpose
+
+    print_field
+    puts
+
+    @field.map! {|r| r.reverse}
+    @field = @field.transpose
+
+    print_field
+    puts
+
+    @field.map! {|r| r.reverse}
+    @field = @field.transpose
+    @field.map! {|r| r.reverse}
+
+    print_field
+    puts
+  end
+
+  def cycle
+    tilt_north
+
+    @field = @field.transpose
+
+    tilt_north
+
+    @field.map! {|r| r.reverse}
+    @field = @field.transpose
+
+    tilt_north
+
+    @field.map! {|r| r.reverse}
+    @field = @field.transpose
+
+    tilt_north
+
+    @field.map! {|r| r.reverse}
+    @field = @field.transpose
+    @field.map! {|r| r.reverse}
   end
 
   def tilt_north
@@ -68,22 +116,34 @@ class Field
     row, col = [0,0]
     loop do
       puts "working row at #{row} which is #{@field[row]}" if DEBUG
-      change = false
-      col=0
-      loop do
-        puts "working on col at #{col} which is #{@field[row][col]}" if DEBUG
-        puts "  which will compare #{@field[row][col]} to #{@field[row][col+1]}" if DEBUG
-        if @field[row][col].label == '.' and @field[row][col+1].label == 'O'
-          puts "need to move" if DEBUG
-          change = true
-          temp = @field[row][col]
-          @field[row][col] = @field[row][col+1]
-          @field[row][col+1] = temp
+      key = @field[row].map(&:label).join
+      if @sorts.has_key? key
+        puts "Found sort already, apply".green if DEBUG
+        #move the row
+        @field[row] = @sorts[key].clone
+      else
+        loop do
+          change = false
+          col=0
+          loop do
+            puts "working on col at #{col} which is #{@field[row][col]}" if DEBUG
+            puts "  which will compare #{@field[row][col]} to #{@field[row][col+1]}" if DEBUG
+            if @field[row][col].label == '.' and @field[row][col+1].label == 'O'
+              puts "need to move" if DEBUG
+              change = true
+              temp = @field[row][col]
+              @field[row][col] = @field[row][col+1]
+              @field[row][col+1] = temp
+            end
+            col += 1 
+            break if col >= @field[0].length-1
+          end
+          break unless change
         end
-        col += 1 
-        break if col >= @field[0].length-1
+        puts "Storing sort of #{key} as #{@field[row]}".red if DEBUG
+        @sorts[key] = @field[row].clone
       end
-      row += 1 unless change
+      row += 1
       break if row >= @field.length
     end
 
