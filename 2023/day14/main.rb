@@ -46,7 +46,12 @@ class Field
     @field = []
     
     @sorts = {}
+    @cycle_cache = {}
     build_field(raw_input)
+  end
+
+  def field_key
+    @field.flatten.join
   end
 
   def print_field
