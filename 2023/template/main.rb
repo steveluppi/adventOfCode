@@ -3,6 +3,9 @@ require 'io/console'
 require 'set'
 
 class AOC
-  def self.parse(lines)
+  def self.silver(lines)
+  end
+
+  def self.gold(lines)
   end
 end
