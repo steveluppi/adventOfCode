@@ -23,3 +23,8 @@ def i_log(message, indent = 0)
   indent.times { |_x| print ' ' }
   puts message
 end
+
+def continue
+  print "...Press any key to continue\r"
+  gets
+end
