@@ -69,6 +69,7 @@ describe 'AOC' do
       it 'can do it' do
         x = AOC.silver(@silver)
         expect(x).to be < 894304
+        expect(x).to be > 890692
         expect(x).to eq nil
       end
     end

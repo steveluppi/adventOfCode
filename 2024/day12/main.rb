@@ -89,10 +89,17 @@ class Plot
       p7 = @plants.find{|pl| pl.x == plant.x+1 and pl.y==plant.y+0}
       p8 = @plants.find{|pl| pl.x == plant.x+1 and pl.y==plant.y+1}
 
-      i1 = ((!p1.nil? and p2.nil?) or (!p1.nil? and p4.nil?) or (p1.nil? and !p4.nil? and !p2.nil?))
-      i2 = ((!p3.nil? and p2.nil?) or (!p3.nil? and p5.nil?) or (p3.nil? and !p2.nil? and !p5.nil?))
-      i3 = ((!p6.nil? and p4.nil?) or (!p6.nil? and p7.nil?) or (p6.nil? and !p4.nil? and !p7.nil?))
-      i4 = ((!p8.nil? and p5.nil?) or (!p8.nil? and p7.nil?) or (p8.nil? and !p7.nil? and !p5.nil?))
+      # 1 2 3
+      # 4   5
+      # 6 7 8
+      #
+      # AAAA
+      #  AA
+      # AAAA
+      i1 = (p1.nil? and !p4.nil? and !p2.nil?)
+      i2 = (p3.nil? and !p2.nil? and !p5.nil?)
+      i3 = (p6.nil? and !p4.nil? and !p7.nil?)
+      i4 = (p8.nil? and !p5.nil? and !p7.nil?)
 
       [i1, i2, i3, i4].filter{|n| n}.size
     end.sum
@@ -109,17 +116,18 @@ class Plot
       p7 = @plants.find{|pl| pl.x == plant.x+1 and pl.y==plant.y+0}
       p8 = @plants.find{|pl| pl.x == plant.x+1 and pl.y==plant.y+1}
 
-      i1 = (!p1.nil? and (p2.nil? or p4.nil?))
-      i2 = (!p3.nil? and (p2.nil? or p5.nil?))
-      i3 = (!p6.nil? and (p4.nil? or p7.nil?))
-      i4 = (!p8.nil? and (p7.nil? or p5.nil?))
+      i1 = (!p1.nil? and p2.nil? and p4.nil?)
+      i2 = (!p3.nil? and p2.nil? and p5.nil?)
+      i3 = (!p6.nil? and p4.nil? and p7.nil?)
+      i4 = (!p8.nil? and p5.nil? and p7.nil?)
 
       [i1, i2, i3, i4].filter{|n| n}.size
     end.sum
   end
 
   def bulk_price
-    area * (outside_corners + (inside_corners / 3)+(kitty_corners))
+    area * (outside_corners + inside_corners + kitty_corners)
+    # area * (outside_corners + (inside_corners / 3)+(kitty_corners))
     # area * (outside_corners + (inside_corners / 3) + (kitty_corners / 2))
   end
 
@@ -245,8 +253,9 @@ class AOC
     # puts 
     # $plots.filter{|pl| pl.letter == 'C'}.each {|pl| puts pl}
     puts
-    AOC.print_garden
-    $plots.each {|pl| puts "Letter #{pl.letter}, oc, ic #{pl.outside_corners}, #{pl.inside_corners/3}, #{pl.kitty_corners} = #{(pl.outside_corners + pl.inside_corners/3 + pl.kitty_corners)}" }
+    # AOC.print_garden
+    # $plots.each {|pl| puts "Letter #{pl.letter}, oc, ic #{pl.outside_corners}, #{pl.inside_corners/3}, #{pl.kitty_corners} = #{(pl.outside_corners + pl.inside_corners/3 + pl.kitty_corners)}" }
+    # $plots.each {|pl| puts "Letter #{pl.letter}, oc, ic #{pl.outside_corners}, #{pl.inside_corners} = #{(pl.outside_corners + pl.inside_corners)}" }
     p $plots.map(&:bulk_price).sum
     $plots.map(&:bulk_price).sum
   end
