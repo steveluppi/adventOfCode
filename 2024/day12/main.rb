@@ -52,12 +52,75 @@ class Plot
     area * perimeter
   end
 
-  def sides
-    1
+  def outside_corners
+    @plants.map do |plant|
+      p1 = @plants.find{|pl| pl.x == plant.x-1 and pl.y==plant.y-1}
+      p2 = @plants.find{|pl| pl.x == plant.x-1 and pl.y==plant.y+0}
+      p3 = @plants.find{|pl| pl.x == plant.x-1 and pl.y==plant.y+1}
+      p4 = @plants.find{|pl| pl.x == plant.x+0 and pl.y==plant.y-1}
+      p5 = @plants.find{|pl| pl.x == plant.x+0 and pl.y==plant.y+1}
+      p6 = @plants.find{|pl| pl.x == plant.x+1 and pl.y==plant.y-1}
+      p7 = @plants.find{|pl| pl.x == plant.x+1 and pl.y==plant.y+0}
+      p8 = @plants.find{|pl| pl.x == plant.x+1 and pl.y==plant.y+1}
+
+      c1 = (p1.nil? and p2.nil? and p4.nil?)
+      c2 = (p2.nil? and p3.nil? and p5.nil?)
+      c3 = (p4.nil? and p6.nil? and p7.nil?)
+      c4 = (p5.nil? and p7.nil? and p8.nil?)
+
+      # i1 = ((!p1.nil? and p2.nil?) or (!p1.nil? and p4.nil?) or (p1.nil? and !p4.nil? and !p2.nil?))
+      # i2 = ((!p3.nil? and p2.nil?) or (!p3.nil? and p5.nil?) or (p3.nil? and !p2.nil? and !p5.nil?))
+      # i3 = ((!p6.nil? and p4.nil?) or (!p6.nil? and p7.nil?) or (p6.nil? and !p4.nil? and !p7.nil?))
+      # i4 = ((!p8.nil? and p5.nil?) or (!p8.nil? and p7.nil?) or (p8.nil? and !p7.nil? and !p5.nil?))
+      #
+      # [c1, c2, c3, c4, i1, i2, i3, i4].filter{|n| n}.size
+      [c1, c2, c3, c4].filter{|n| n}.size
+    end.sum
+  end
+
+  def inside_corners
+    @plants.map do |plant|
+      p1 = @plants.find{|pl| pl.x == plant.x-1 and pl.y==plant.y-1}
+      p2 = @plants.find{|pl| pl.x == plant.x-1 and pl.y==plant.y+0}
+      p3 = @plants.find{|pl| pl.x == plant.x-1 and pl.y==plant.y+1}
+      p4 = @plants.find{|pl| pl.x == plant.x+0 and pl.y==plant.y-1}
+      p5 = @plants.find{|pl| pl.x == plant.x+0 and pl.y==plant.y+1}
+      p6 = @plants.find{|pl| pl.x == plant.x+1 and pl.y==plant.y-1}
+      p7 = @plants.find{|pl| pl.x == plant.x+1 and pl.y==plant.y+0}
+      p8 = @plants.find{|pl| pl.x == plant.x+1 and pl.y==plant.y+1}
+
+      i1 = ((!p1.nil? and p2.nil?) or (!p1.nil? and p4.nil?) or (p1.nil? and !p4.nil? and !p2.nil?))
+      i2 = ((!p3.nil? and p2.nil?) or (!p3.nil? and p5.nil?) or (p3.nil? and !p2.nil? and !p5.nil?))
+      i3 = ((!p6.nil? and p4.nil?) or (!p6.nil? and p7.nil?) or (p6.nil? and !p4.nil? and !p7.nil?))
+      i4 = ((!p8.nil? and p5.nil?) or (!p8.nil? and p7.nil?) or (p8.nil? and !p7.nil? and !p5.nil?))
+
+      [i1, i2, i3, i4].filter{|n| n}.size
+    end.sum
+  end
+
+  def kitty_corners
+    @plants.map do |plant|
+      p1 = @plants.find{|pl| pl.x == plant.x-1 and pl.y==plant.y-1}
+      p2 = @plants.find{|pl| pl.x == plant.x-1 and pl.y==plant.y+0}
+      p3 = @plants.find{|pl| pl.x == plant.x-1 and pl.y==plant.y+1}
+      p4 = @plants.find{|pl| pl.x == plant.x+0 and pl.y==plant.y-1}
+      p5 = @plants.find{|pl| pl.x == plant.x+0 and pl.y==plant.y+1}
+      p6 = @plants.find{|pl| pl.x == plant.x+1 and pl.y==plant.y-1}
+      p7 = @plants.find{|pl| pl.x == plant.x+1 and pl.y==plant.y+0}
+      p8 = @plants.find{|pl| pl.x == plant.x+1 and pl.y==plant.y+1}
+
+      i1 = (!p1.nil? and (p2.nil? or p4.nil?))
+      i2 = (!p3.nil? and (p2.nil? or p5.nil?))
+      i3 = (!p6.nil? and (p4.nil? or p7.nil?))
+      i4 = (!p8.nil? and (p7.nil? or p5.nil?))
+
+      [i1, i2, i3, i4].filter{|n| n}.size
+    end.sum
   end
 
   def bulk_price
-    area * sides
+    area * (outside_corners + (inside_corners / 3)+(kitty_corners))
+    # area * (outside_corners + (inside_corners / 3) + (kitty_corners / 2))
   end
 
   def add plant
@@ -81,7 +144,13 @@ class AOC
     for x in 0..$max_x
       for y in 0..$max_y
         plant = $garden.find{|g| g.x == x and g.y == y}
-        print plant.letter unless plant.nil?
+        unless plant.nil?
+          if plant.letter == 'R'
+            print plant.letter.green
+          else
+            print plant.letter
+          end
+        end
         print "?" if plant.nil?
         # print plant.letter.green if plant.letter == 'C'
         # print '•' unless plant.letter == 'C'
@@ -177,7 +246,9 @@ class AOC
     # $plots.filter{|pl| pl.letter == 'C'}.each {|pl| puts pl}
     puts
     AOC.print_garden
-    $plots.map(&:price).sum
+    $plots.each {|pl| puts "Letter #{pl.letter}, oc, ic #{pl.outside_corners}, #{pl.inside_corners/3}, #{pl.kitty_corners} = #{(pl.outside_corners + pl.inside_corners/3 + pl.kitty_corners)}" }
+    p $plots.map(&:bulk_price).sum
+    $plots.map(&:bulk_price).sum
   end
 
   def self.gold(lines)
