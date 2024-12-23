@@ -125,5 +125,59 @@ class AOC
   end
 
   def self.gold(lines)
+    $grid = lines
+    $mr = lines.length-1
+    $mc = lines.first.length-1
+    
+    debug "Here is the grid:".blue
+    print_grid true
+
+    $start, $end = [nil, nil]
+
+    # need to find start and end
+    debug "Looking for start and end points".blue
+    for r in 0..$mr do
+      for c in 0..$mc do
+        $start = [r,c] if $grid[r][c] == 'S'
+        $end = [r,c] if $grid[r][c] == 'E'
+      end
+    end
+
+    # Setup the loop
+    pathfinder = AOC.find_path
+    
+    the_path = pathfinder.path.to_a
+    the_path << "#{$end.first},#{$end.last}"
+    debugp the_path
+    pathfinder.print_path
+
+    # Work on the cheats
+    cheats = []
+    pb = ProgressBar.new(the_path.length)
+    the_path.each_with_index do |step, idx|
+      pb.increment!
+      debug "working on index #{idx} of #{step}".blue
+      r,c = step.split(',').map(&:to_i)
+
+      cheat_to = []
+      for cr in ([(r-20),0].max)..([(r+20),$mr].min) do
+        diff = 20 - (r-cr).abs
+        for cc in (c-diff)..(c+diff) do
+          coord = "#{cr},#{cc}"
+          debug " cheat #{coord}".gray if AOC.in_grid(cr, cc)
+
+          if AOC.in_grid(cr,cc) and the_path.include?(coord)
+            cheat_idx = the_path.index(coord)
+            cheat_to << (cheat_idx - idx) - ((r-cr).abs + (c-cc).abs)
+          end
+        end
+      end
+      debugp cheat_to
+
+      cheats << cheat_to.flatten
+    end
+    cheats.flatten!.reject!{|s| s < 100}.sort!
+    # cheats.group_by{|s| s}.each{|s,v| puts "#{v.length} cheats of #{s}"}
+    cheats.length
   end
 end

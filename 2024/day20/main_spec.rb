@@ -29,6 +29,7 @@ describe 'AOC' do
   describe 'gold' do
     describe 'examples' do
       it 'can do it' do
+        $debug=true
         x = AOC.gold(@example)
         expect(x).to eq nil
       end
@@ -37,6 +38,7 @@ describe 'AOC' do
     describe 'for real' do
       it 'can do it' do
         x = AOC.gold(@silver)
+        expect(x).to be > 9325
         expect(x).to eq nil
       end
     end
