@@ -1,4 +1,5 @@
 require 'colorize'
+require 'progress_bar'
 
 def read_file_and_chomp(file_path)
   File.readlines(file_path).map(&:chomp)
