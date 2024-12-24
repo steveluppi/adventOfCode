@@ -174,18 +174,107 @@ class NumPad
   end
 end
 
+class DPad
+  MOVES = {
+    'A' => {
+      'A' => '',
+      '^' => '<',
+      '<' => 'v<<',
+      'v' => 'v<',
+      '>' => 'v'
+    },
+    '^' => {
+      'A' => '>',
+      '^' => '',
+      '<' => 'v<',
+      'v' => 'v',
+      '>' => 'v>'
+    },
+    '<' => {
+      'A' => '>>^',
+      '^' => '>^',
+      '<' => '',
+      'v' => '>',
+      '>' => '>>'
+    },
+    'v' => {
+      'A' => '>^',
+      '^' => '^',
+      '<' => '<',
+      'v' => '',
+      '>' => '>'
+    },
+    '>' => {
+      'A' => '^',
+      '^' => '^<',
+      '<' => '<<',
+      'v' => '<',
+      '>' => ''
+    },
+  }
+  def initialize
+    @pos = 'A'
+  end
+
+  def to(position)
+    path = MOVES[@pos][position]
+    @pos = position
+    return path
+  end
+
+  def print_pad
+    puts
+    print ' '
+    print @pos == '^' ? '^'.red : '^'
+    print @pos == 'A' ? 'A'.red : 'A'
+    puts
+    print @pos == '<' ? '<'.red : '<'
+    print @pos == 'v' ? 'v'.red : 'v'
+    print @pos == '>' ? '>'.red : '>'
+    puts
+    puts
+  end
+end
+
 class AOC
   def self.silver(lines)
-    x = NumPad.new()
-    x.print_pad
-    entry = "029A"
-    full_path = ''
-    entry.split('').each do |key|
-      path = x.to(key)
-      x.print_pad
-      full_path << path << 'A'
+    num_pad = NumPad.new
+    dpad1 = DPad.new
+    dpad2 = DPad.new
+
+    complexities = lines.map do |code|
+      dpad1_path = ''
+      code.split('').each do |key|
+        path = num_pad.to(key)
+        dpad1_path << path << 'A'
+      end
+      # p dpad1_path
+
+      dpad2_path = ''
+      dpad1_path.split('').each do |key|
+        path = dpad1.to(key)
+        dpad2_path << path << 'A'
+      end
+      # p dpad2_path
+
+      dpad3_path = ''
+      dpad2_path.split('').each do |key|
+        path = dpad2.to(key)
+        dpad3_path << path << 'A'
+      end
+      # p dpad3_path
+      path_len = dpad3_path.length
+      # p path_len
+      code_val = code.gsub('A','').to_i
+      # p code_val
+      complexity = path_len * code_val
+      puts
+      puts "#{code}: #{dpad3_path}".blue
+      puts "#{code}: #{path_len} * #{code_val} = #{complexity}"
+      complexity
     end
-    p full_path
+    
+    complexities.sum
   end
 
   def self.gold(lines)
