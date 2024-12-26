@@ -7,141 +7,141 @@ class NumPad
     'A' => {
       'A' => '',
       '0' => '<',
-      '1' => '^<<',
-      '2' => '^<',
+      '1' => '^<< <<^',
+      '2' => '^< <^',
       '3' => '^',
-      '4' => '^^<<',
-      '5' => '^^<',
+      '4' => '^^<< <<^^',
+      '5' => '^^< <^^',
       '6' => '^^',
-      '7' => '^^^<<',
-      '8' => '^^^<',
+      '7' => '^^^<< <<^^^',
+      '8' => '^^^< ^^^<',
       '9' => '^^^',
     },
     '0' => {
       'A' => '>',
       '0' => '',
-      '1' => '^<',
+      '1' => '^< <^',
       '2' => '^',
-      '3' => '^>',
-      '4' => '^^<',
+      '3' => '^> >^',
+      '4' => '^^< <^^',
       '5' => '^^',
-      '6' => '^^>',
-      '7' => '^^^<',
+      '6' => '^^> >^^',
+      '7' => '^^^< <^^^',
       '8' => '^^^',
-      '9' => '^^^>',
+      '9' => '^^^> >^^^',
     },
     '1' => {
-      'A' => '>>v',
-      '0' => '>v',
+      'A' => '>>v v>>',
+      '0' => '>v v>',
       '1' => '',
       '2' => '>',
       '3' => '>>',
       '4' => '^',
-      '5' => '^>',
-      '6' => '^>>',
+      '5' => '^> >^',
+      '6' => '^>> >>^',
       '7' => '^^',
-      '8' => '^^>',
-      '9' => '^^>>',
+      '8' => '^^> >^^',
+      '9' => '^^>> >>^^',
     },
     '2' => {
-      'A' => 'v>',
+      'A' => 'v> >^',
       '0' => 'v',
       '1' => '<',
       '2' => '',
       '3' => '>',
-      '4' => '^<',
+      '4' => '^< <^',
       '5' => '^',
-      '6' => '^>',
-      '7' => '^^<',
+      '6' => '^> >^',
+      '7' => '^^< <^^',
       '8' => '^^',
-      '9' => '^^>',
+      '9' => '^^> >^^',
     },
     '3' => {
       'A' => 'v',
-      '0' => 'v<',
+      '0' => 'v< <v',
       '1' => '<<',
       '2' => '<',
       '3' => '',
-      '4' => '^<<',
-      '5' => '^<',
+      '4' => '^<< <<^',
+      '5' => '^< <^',
       '6' => '^',
-      '7' => '^^<<',
-      '8' => '^^<',
+      '7' => '^^<< <<^^',
+      '8' => '^^< <^^',
       '9' => '^^',
     },
     '4' => {
-      'A' => '>>vv',
-      '0' => '>vv',
+      'A' => '>>vv vv>>',
+      '0' => '>vv vv>',
       '1' => 'v',
-      '2' => '>v',
-      '3' => '>>v',
+      '2' => '>v v>',
+      '3' => '>>v v>>',
       '4' => '',
       '5' => '>',
       '6' => '>>',
       '7' => '^',
-      '8' => '^>',
-      '9' => '^>>',
+      '8' => '^> >^',
+      '9' => '^>> >>^',
     },
     '5' => {
-      'A' => 'vv>',
+      'A' => 'vv> >vv',
       '0' => 'vv',
-      '1' => 'v<',
+      '1' => 'v< <v',
       '2' => 'v',
-      '3' => 'v>',
+      '3' => 'v> >v',
       '4' => '<',
       '5' => '',
       '6' => '>',
-      '7' => '^<',
+      '7' => '^< <^',
       '8' => '^',
-      '9' => '^>',
+      '9' => '^> >^',
     },
     '6' => {
       'A' => 'vv',
-      '0' => 'vv<',
-      '1' => 'v<<',
-      '2' => 'v<',
+      '0' => 'vv< <vv',
+      '1' => 'v<< <<v',
+      '2' => 'v< <v',
       '3' => 'v',
       '4' => '<<',
       '5' => '<',
       '6' => '',
-      '7' => '^<<',
-      '8' => '^<',
+      '7' => '^<< <<^',
+      '8' => '^< <^',
       '9' => '^',
     },
     '7' => {
-      'A' => '>>vvv',
-      '0' => '>vvv',
+      'A' => '>>vvv vvv>>',
+      '0' => '>vvv vvv>',
       '1' => 'vv',
-      '2' => 'vv>',
-      '3' => 'vv>>',
+      '2' => 'vv> >vv',
+      '3' => 'vv>> >>vv',
       '4' => 'v',
-      '5' => 'v>',
-      '6' => 'v>>',
+      '5' => 'v> >v',
+      '6' => 'v>> >>v',
       '7' => '',
       '8' => '>',
       '9' => '>>',
     },
     '8' => {
-      'A' => '>vvv',
+      'A' => '>vvv vvv>',
       '0' => 'vvv',
-      '1' => 'vv<',
+      '1' => 'vv< <vv',
       '2' => 'vv',
-      '3' => 'vv>',
-      '4' => 'v<',
+      '3' => 'vv> >vv',
+      '4' => 'v< <v',
       '5' => 'v',
-      '6' => 'v>',
+      '6' => 'v> >v',
       '7' => '<',
       '8' => '',
       '9' => '>',
     },
     '9' => {
       'A' => 'vvv',
-      '0' => 'vvv<',
-      '1' => 'vv<<',
-      '2' => 'vv<',
+      '0' => 'vvv< <vvv',
+      '1' => 'vv<< <<vv',
+      '2' => 'vv< <vv',
       '3' => 'vv',
-      '4' => 'v<<',
-      '5' => 'v<',
+      '4' => 'v<< <<v',
+      '5' => 'v< <v',
       '6' => 'v',
       '7' => '<<',
       '8' => '<',
@@ -154,7 +154,8 @@ class NumPad
   end
 
   def to(position)
-    path = MOVES[@pos][position]
+    # path = MOVES[@pos][position]
+    path = priority_moves(@pos, position).first
     @pos = position
     return path
   end
@@ -172,6 +173,22 @@ class NumPad
     puts
     puts
   end
+
+  def priority_moves(from, to)
+    moves = MOVES[from][to].split(' ')
+    # return moves
+    moves.sort! do |a,b| 
+      case 
+      when a.start_with?(from)
+        -1
+      when b.start_with?(from)
+        1
+      else
+        0
+      end
+    end
+    moves
+  end
 end
 
 class DPad
@@ -179,26 +196,26 @@ class DPad
     'A' => {
       'A' => '',
       '^' => '<',
-      '<' => 'v<<',
-      'v' => 'v<',
+      '<' => 'v<< <<v',
+      'v' => 'v< <v',
       '>' => 'v'
     },
     '^' => {
       'A' => '>',
       '^' => '',
-      '<' => 'v<',
+      '<' => 'v< <v',
       'v' => 'v',
-      '>' => 'v>'
+      '>' => 'v> >v'
     },
     '<' => {
-      'A' => '>>^',
-      '^' => '>^',
+      'A' => '>>^ ^>>',
+      '^' => '>^ ^>',
       '<' => '',
       'v' => '>',
       '>' => '>>'
     },
     'v' => {
-      'A' => '>^',
+      'A' => '>^ ^>',
       '^' => '^',
       '<' => '<',
       'v' => '',
@@ -206,7 +223,7 @@ class DPad
     },
     '>' => {
       'A' => '^',
-      '^' => '^<',
+      '^' => '^< <^',
       '<' => '<<',
       'v' => '<',
       '>' => ''
@@ -217,7 +234,9 @@ class DPad
   end
 
   def to(position)
-    path = MOVES[@pos][position]
+    # path = MOVES[@pos][position]
+    return '' if position==@pos
+    path = priority_moves(@pos, position).first
     @pos = position
     return path
   end
@@ -234,6 +253,21 @@ class DPad
     puts
     puts
   end
+  def priority_moves(from, to)
+    moves = MOVES[from][to].split(' ')
+    # return moves
+    moves.sort! do |a,b| 
+      case 
+      when a.start_with?(from)
+        -1
+      when b.start_with?(from)
+        1
+      else
+        0
+      end
+    end
+    moves
+  end
 end
 
 class AOC
@@ -243,38 +277,50 @@ class AOC
     dpad2 = DPad.new
 
     complexities = lines.map do |code|
-      dpad1_path = ''
-      code.split('').each do |key|
-        path = num_pad.to(key)
-        dpad1_path << path << 'A'
-      end
-      # p dpad1_path
+      dpad1_path = AOC.dpad1_path(code, num_pad)
 
-      dpad2_path = ''
-      dpad1_path.split('').each do |key|
-        path = dpad1.to(key)
-        dpad2_path << path << 'A'
-      end
-      # p dpad2_path
+      dpad2_path = AOC.dpad2_path(dpad1_path, dpad1)
 
-      dpad3_path = ''
-      dpad2_path.split('').each do |key|
-        path = dpad2.to(key)
-        dpad3_path << path << 'A'
-      end
-      # p dpad3_path
+      dpad3_path = AOC.dpad3_path(dpad2_path, dpad2)
+
       path_len = dpad3_path.length
-      # p path_len
       code_val = code.gsub('A','').to_i
-      # p code_val
       complexity = path_len * code_val
+
       puts
       puts "#{code}: #{dpad3_path}".blue
       puts "#{code}: #{path_len} * #{code_val} = #{complexity}"
       complexity
+      # dpad3_path
     end
-    
+
     complexities.sum
+  end
+
+  def self.dpad1_path(code, num_pad)
+    dpad1_path = ''
+    code.split('').each do |key|
+      path = num_pad.to(key)
+      dpad1_path << path << 'A'
+    end
+    dpad1_path
+  end
+
+  def self.dpad2_path(dpad1_path, dpad1)
+    dpad2_path = ''
+    dpad1_path.split('').each do |key|
+      path = dpad1.to(key)
+      dpad2_path << path << 'A'
+    end
+    dpad2_path 
+  end
+  def self.dpad3_path(dpad2_path, dpad2)
+    dpad3_path = ''
+    dpad2_path.split('').each do |key|
+      path = dpad2.to(key)
+      dpad3_path << path << 'A'
+    end
+    dpad3_path 
   end
 
   def self.gold(lines)
